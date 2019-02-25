@@ -11,16 +11,19 @@ public class Map {
     private int width;
     private int height;
     private ArrayList<Layer> layers;
+    private ArrayList<Tile> tilesets;
     private ArrayList<TileMap> tileMaps;
 
     public Map(String filename){
 
         layers = new ArrayList<>();
+        tilesets = new ArrayList<>();
 
         JsonReader reader = null;
         reader = Json.createReader(getClass().getResourceAsStream(filename));
         JsonObject root = reader.readObject();
 
+        convertJsonTileToTiles(root.getJsonArray("tilesets"));
         convertJsonLayersToLayers(root.getJsonArray("layers"));
 
         this.width = root.getInt("width");
@@ -33,19 +36,35 @@ public class Map {
 
     public void convertJsonTileToTiles(JsonArray array) {
         for(int i = 0; i < array.size(); i++) {
-            
+            Tile tile = new Tile();
+
+            tile.setColumns(array.getJsonObject(i).getInt("columns"));
+            tile.setFirstgid(array.getJsonObject(i).getInt("firstgid"));
+            tile.setImageName(array.getJsonObject(i).getString("image"));
+            tile.setImageheight(array.getJsonObject(i).getInt("imageheight"));
+            tile.setImagewidth(array.getJsonObject(i).getInt("imagewidth"));
+            tile.setMargin(array.getJsonObject(i).getInt("margin"));
+            tile.setName(array.getJsonObject(i).getString("name"));
+            tile.setSpacing(array.getJsonObject(i).getInt("spacing"));
+            tile.setTilecount(array.getJsonObject(i).getInt("tilecount"));
+            tile.setTileheight(array.getJsonObject(i).getInt("tileheight"));
+            tile.setTilewidth(array.getJsonObject(i).getInt("tilewidth"));
+
+            tilesets.add(tile);
         }
     }
 
     public void convertJsonLayersToLayers(JsonArray array) {
         for(int i = 0; i < array.size(); i++) {
             Layer layer = new Layer();
+
             JsonArray dataLayer = array.getJsonObject(i).getJsonArray("data");
             ArrayList<Integer> data = new ArrayList<>();
             for(int j = 0; j < dataLayer.size(); j++) {
                 data.add(dataLayer.getInt(j));
             }
             layer.setData(data);
+
             layer.setHeight(array.getJsonObject(i).getInt("height"));
             layer.setId(array.getJsonObject(i).getInt("id"));
             layer.setName(array.getJsonObject(i).getString("name"));
@@ -61,6 +80,6 @@ public class Map {
     }
 
     public void getwidth(){
-        System.out.println(layers);
+
     }
 }

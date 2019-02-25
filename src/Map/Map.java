@@ -5,6 +5,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 public class Map {
@@ -30,11 +31,17 @@ public class Map {
         this.height = root.getInt("height");
     }
 
-    public void draw(Graphics2D g2d){
-
+    public void draw(Graphics2D g2d) {
+        for(int x = 0; x < this.width; x++) {
+            for(int y = 0; y < this.height; y++) {
+                AffineTransform tx = new AffineTransform();
+                tx.translate(x, y);
+                g2d.drawImage(null, tx, null);
+            }
+        }
     }
 
-    public void convertJsonTileToTiles(JsonArray array) {
+    private void convertJsonTileToTiles(JsonArray array) {
         for(int i = 0; i < array.size(); i++) {
             Tile tile = new Tile();
 
@@ -54,7 +61,7 @@ public class Map {
         }
     }
 
-    public void convertJsonLayersToLayers(JsonArray array) {
+    private void convertJsonLayersToLayers(JsonArray array) {
         for(int i = 0; i < array.size(); i++) {
             Layer layer = new Layer();
 
@@ -77,9 +84,5 @@ public class Map {
 
             layers.add(layer);
         }
-    }
-
-    public void getwidth(){
-
     }
 }

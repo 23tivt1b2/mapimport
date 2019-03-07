@@ -1,4 +1,4 @@
-package Map;
+package Json;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

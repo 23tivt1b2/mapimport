@@ -1,10 +1,10 @@
-package Map;
+package Json;
 
 import javax.json.JsonObject;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Tile {
+public class Tileset {
     private JsonObject object;
     private int columns;
     private int firstgid;
@@ -18,11 +18,11 @@ public class Tile {
     private int tileheight;
     private int tilewidth;
 
-    public Tile() {
+    public Tileset() {
 
     }
 
-    public Tile(JsonObject object){
+    public Tileset(JsonObject object){
         this.object = object;
     }
 

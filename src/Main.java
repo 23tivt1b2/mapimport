@@ -13,10 +13,6 @@ import java.awt.geom.AffineTransform;
 public class Main extends Application {
 
     private Canvas canvas;
-
-    private int x = 0;
-    private int y = 100;
-
     private Camera camera;
 
     @Override
@@ -65,16 +61,13 @@ public class Main extends Application {
 
         Map.getInstance().draw(graphics);
 
-        graphics.setColor(Color.red);
-        graphics.fill(new Rectangle(x, y, 10, 10));
-
         graphics.setTransform(origianlTransform);
 
 
     }
 
     private void update(double deltaTime) {
-        x += 1;
+
     }
 
 

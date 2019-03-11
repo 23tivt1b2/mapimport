@@ -26,6 +26,8 @@ public class Camera {
 		this.resizable = resizable;
 		this.g2d = g2d;
 
+		//this.lastMousePos = new Point2D.Double(0, 0);
+
 		canvas.setOnMousePressed(e -> {lastMousePos = new Point2D.Double(e.getX(), e.getY());});
 		canvas.setOnMouseDragged(e -> mouseDragged(e));
 		canvas.setOnScroll(e-> mouseScroll(e));
@@ -35,7 +37,7 @@ public class Camera {
 
 	public AffineTransform getTransform(int windowWidth, int windowHeight)  {
 		AffineTransform tx = new AffineTransform();
-		tx.translate(windowWidth/2, windowHeight/2);
+		tx.translate(windowWidth / 2, windowHeight / 2);
 		tx.scale(zoom, zoom);
 		tx.translate(centerPoint.getX(), centerPoint.getY());
 		tx.rotate(rotation);

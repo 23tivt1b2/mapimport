@@ -25,10 +25,6 @@ public class Layer {
         this.images = images;
     }
 
-    public void draw(Graphics2D g2d){
-
-    }
-
     public ArrayList<BufferedImage> getImages() {
         return images;
     }

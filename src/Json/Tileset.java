@@ -18,9 +18,6 @@ public class Tileset {
     private int tileheight;
     private int tilewidth;
 
-    public Tileset() {
-
-    }
 
     public Tileset(JsonObject object){
         this.object = object;

@@ -24,6 +24,7 @@ public class MapDataLoader {
     private String type;
     private double version;
     private int width;
+    private JsonObject root;
 
     private MapDataLoader() {
         tilesets = new ArrayList<>();
@@ -39,7 +40,7 @@ public class MapDataLoader {
             try {
                 JsonReader reader = null;
                 reader = Json.createReader(getClass().getResourceAsStream(fileName));
-                JsonObject root = reader.readObject();
+                this.root = reader.readObject();
 
                 convertJsonTileToTiles(root.getJsonArray("tilesets"));
                 convertJsonLayersToLayers(root.getJsonArray("layers"));
@@ -55,7 +56,7 @@ public class MapDataLoader {
 
     private void convertJsonTileToTiles(JsonArray array) {
         for(int i = 0; i < array.size(); i++) {
-            Tileset tile = new Tileset();
+            Tileset tile = new Tileset(root);
 
             tile.setColumns(array.getJsonObject(i).getInt("columns"));
             tile.setFirstgid(array.getJsonObject(i).getInt("firstgid"));

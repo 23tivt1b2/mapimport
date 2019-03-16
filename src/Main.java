@@ -9,11 +9,16 @@ import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Main extends Application {
 
     private Canvas canvas;
     private Camera camera;
+    private ArrayList<Location> locations;
+    private Map map;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,7 +50,38 @@ public class Main extends Application {
 
     public void init() {
         MapDataLoader.getInstance().loadJson("map.json");
-        Map.getInstance();
+        this.map = new Map();
+
+        Entrance.getInstance().addTileToEntrance(map.getTileMap()[0][3]);
+        Entrance.getInstance().addTileToEntrance(map.getTileMap()[0][4]);
+        Entrance.getInstance().addTileToEntrance(map.getTileMap()[0][5]);
+
+        Random rnd = new Random();
+        int maxMovementSpeed = 2;
+
+        locations = new ArrayList<>();
+        Location location = new Location(56, 58, map);
+
+        for(int i = 0; i < 10; i++) {
+            int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
+            //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
+            int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
+            Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+            location.addVisitor(person);
+        }
+
+        locations.add(location);
+
+        Location location2 = new Location(35, 14, map);
+        for(int i = 0; i < 10; i++) {
+            int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
+            //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
+            int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
+            Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+            location2.addVisitor(person);
+        }
+
+        locations.add(location2);
     }
 
 
@@ -59,15 +95,19 @@ public class Main extends Application {
 
         graphics.setTransform(camera.getTransform((int) canvas.getWidth(), (int) canvas.getHeight()));
 
-        Map.getInstance().draw(graphics);
+        this.map.draw(graphics);
+
+        for(Location location : locations) {
+            location.drawVisitors(graphics);
+        }
 
         graphics.setTransform(origianlTransform);
-
-
     }
 
     private void update(double deltaTime) {
-
+        for(Location location : locations) {
+            location.updateVisitors();
+        }
     }
 
 

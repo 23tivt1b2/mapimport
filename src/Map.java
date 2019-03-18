@@ -1,13 +1,11 @@
+import Json.Area;
 import Json.Layer;
 import Json.Tileset;
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Map {
 
@@ -86,7 +84,11 @@ public class Map {
                     }
                     x++;
                 }
-            } else {
+            }else if(layer.getName().equals("Area")){
+                        layer.getAreas();
+                }
+
+             else {
                 for (int i = 0; i < layer.getData().size(); i++) {
                     if (x > width - 1) {
                         x = 0;

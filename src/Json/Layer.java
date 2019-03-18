@@ -1,12 +1,12 @@
 package Json;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Layer {
     private ArrayList<BufferedImage> images;
     private ArrayList<Integer> data;
+    private ArrayList<Area> areas;
     private int height;
     private int id;
     private String name;
@@ -111,5 +111,17 @@ public class Layer {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public ArrayList<Area> getAreas() {
+        return areas;
+    }
+
+    public void addArea(Area area){
+        areas.add(area);
+    }
+
+    public void setAreas(ArrayList<Area> areas) {
+        this.areas = areas;
     }
 }

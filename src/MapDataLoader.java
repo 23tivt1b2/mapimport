@@ -3,6 +3,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.util.ArrayList;
+
 import Json.*;
 
 public class MapDataLoader {
@@ -35,7 +36,7 @@ public class MapDataLoader {
     }
 
     public void loadJson(String fileName, boolean override) {
-        if(!hasData || override) {
+        if (!hasData || override) {
             try {
                 JsonReader reader = null;
                 reader = Json.createReader(getClass().getResourceAsStream(fileName));
@@ -47,14 +48,14 @@ public class MapDataLoader {
 
                 hasData = true;
 
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
         }
     }
 
     private void convertJsonTileToTiles(JsonArray array) {
-        for(int i = 0; i < array.size(); i++) {
+        for (int i = 0; i < array.size(); i++) {
             Tileset tile = new Tileset(root);
 
             tile.setColumns(array.getJsonObject(i).getInt("columns"));
@@ -78,23 +79,27 @@ public class MapDataLoader {
             Layer layer = new Layer();
 
             JsonArray dataLayer = array.getJsonObject(i).getJsonArray("data");
-            ArrayList<Integer> data = new ArrayList<>();
-            for (int j = 0; j < dataLayer.size(); j++) {
-                data.add(dataLayer.getInt(j));
+            if(array.getJsonObject(i).getString("name").equals("Area")){
+                convertJsonToObject(array);
+            }else {
+                ArrayList<Integer> data = new ArrayList<>();
+                for (int j = 0; j < dataLayer.size(); j++) {
+                    data.add(dataLayer.getInt(j));
+                }
+                layer.setData(data);
+
+                layer.setHeight(array.getJsonObject(i).getInt("height"));
+                layer.setId(array.getJsonObject(i).getInt("id"));
+                layer.setName(array.getJsonObject(i).getString("name"));
+                layer.setOpacity(array.getJsonObject(i).getInt("opacity"));
+                layer.setType(array.getJsonObject(i).getString("type"));
+                layer.setVisible(array.getJsonObject(i).getBoolean("visible"));
+                layer.setWidth(array.getJsonObject(i).getInt("width"));
+                layer.setX(array.getJsonObject(i).getInt("x"));
+                layer.setY(array.getJsonObject(i).getInt("y"));
+
+                layers.add(layer);
             }
-            layer.setData(data);
-
-            layer.setHeight(array.getJsonObject(i).getInt("height"));
-            layer.setId(array.getJsonObject(i).getInt("id"));
-            layer.setName(array.getJsonObject(i).getString("name"));
-            layer.setOpacity(array.getJsonObject(i).getInt("opacity"));
-            layer.setType(array.getJsonObject(i).getString("type"));
-            layer.setVisible(array.getJsonObject(i).getBoolean("visible"));
-            layer.setWidth(array.getJsonObject(i).getInt("width"));
-            layer.setX(array.getJsonObject(i).getInt("x"));
-            layer.setY(array.getJsonObject(i).getInt("y"));
-
-            layers.add(layer);
         }
     }
 
@@ -113,8 +118,33 @@ public class MapDataLoader {
         this.width = object.getInt("width");
     }
 
+    private void convertJsonToObject(JsonArray array) {
+        for (int i = 0; i < array.size(); i++) {
+            Layer layer = new Layer();
+            JsonArray objectLayer = array.getJsonObject(i).getJsonArray("objects");
+            for (int j = 0; j < objectLayer.size(); j++) {
+                Area area = new Area();
+                area.setHeight(objectLayer.getJsonObject(i).getInt("height"));
+                area.setId(objectLayer.getJsonObject(i).getInt("id"));
+                area.setName(objectLayer.getJsonObject(i).getString("name"));
+                area.setWidth(objectLayer.getJsonObject(i).getInt("width"));
+                area.setX(objectLayer.getJsonObject(i).getInt("x"));
+                area.setY(objectLayer.getJsonObject(i).getInt("y"));
+                layer.addArea(area);
+            }
+            layer.setId(array.getJsonObject(i).getInt("id"));
+            layer.setName(array.getJsonObject(i).getString("name"));
+            layer.setOpacity(array.getJsonObject(i).getInt("opacity"));
+            layer.setType(array.getJsonObject(i).getString("type"));
+            layer.setVisible(array.getJsonObject(i).getBoolean("visible"));
+            layer.setX(array.getJsonObject(i).getInt("x"));
+            layer.setY(array.getJsonObject(i).getInt("y"));
+
+        }
+    }
+
     public static MapDataLoader getInstance() {
-        if(mapDataLoader == null) {
+        if (mapDataLoader == null) {
             mapDataLoader = new MapDataLoader();
         }
 

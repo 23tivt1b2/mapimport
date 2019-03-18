@@ -72,7 +72,7 @@ public class Main extends Application {
 
         locations.add(location);
 
-        Location location2 = new Location(35, 14, map);
+        Location location2 = new Location(50, 14, map);
         for(int i = 0; i < 10; i++) {
             int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
             //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;

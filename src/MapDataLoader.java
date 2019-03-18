@@ -9,7 +9,6 @@ public class MapDataLoader {
 
     private static MapDataLoader mapDataLoader;
     private boolean hasData;
-
     private int height;
     private boolean infinite;
     private ArrayList<Layer> layers;

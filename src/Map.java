@@ -25,7 +25,7 @@ public class Map {
     public Map() {
         this.tilesets = new ArrayList<>();
 
-        if(MapDataLoader.getInstance().getHasData()) {
+        if (MapDataLoader.getInstance().getHasData()) {
             this.width = MapDataLoader.getInstance().getWidth();
             this.height = MapDataLoader.getInstance().getHeight();
             this.tileWidth = MapDataLoader.getInstance().getTileWidth();
@@ -42,30 +42,28 @@ public class Map {
 
     private void initializeMap() {
         try {
-            for(Tileset tile : MapDataLoader.getInstance().getTilesets()) {
+            for (Tileset tile : MapDataLoader.getInstance().getTilesets()) {
 
                 String imageFileName = tile.getImageName();
                 BufferedImage tilemap = ImageIO.read(getClass().getResourceAsStream(imageFileName));
 
-                for(int y = 0; y < tilemap.getHeight(); y += tileHeight)
-                {
-                    for(int x = 0; x < tilemap.getWidth(); x += tileWidth)
-                    {
+                for (int y = 0; y < tilemap.getHeight(); y += tileHeight) {
+                    for (int x = 0; x < tilemap.getWidth(); x += tileWidth) {
                         tilesets.add(tilemap.getSubimage(x, y, tileWidth, tileHeight));
                     }
                 }
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
 
-        for(Layer layer : MapDataLoader.getInstance().getLayers()) {
+        for (Layer layer : MapDataLoader.getInstance().getLayers()) {
             int x = 0;
             int y = 0;
 
-            if(layer.getName().equals("collision")) {
-                for(int i = 0; i < layer.getData().size(); i++) {
-                    if(x > width  - 1) {
+            if (layer.getName().equals("collision")) {
+                for (int i = 0; i < layer.getData().size(); i++) {
+                    if (x > width - 1) {
                         x = 0;
                         y++;
                     }
@@ -73,24 +71,21 @@ public class Map {
                     //So if the current number in the layer is higher than 0, it is a wall
                     //If not we still add it to the list but as a non wall.
                     //Later in this method we merge the collision layer with the other layers and check whetever something is a wall or not.
-                    if(layer.getData().get(i) > 0) {
+                    if (layer.getData().get(i) > 0) {
                         collisionTiles[y][x] = new Tile(tilesets.get(layer.getData().get(i) - 1), x, y, tileWidth, tileHeight, scale, true);
-                    }
-                    else {
+                    } else {
                         collisionTiles[y][x] = new Tile(tilesets.get(layer.getData().get(i)), x, y, tileWidth, tileHeight, scale, false);
                     }
-
                     x++;
                 }
-            }
-            else {
-                for(int i = 0; i < layer.getData().size(); i++) {
-                    if(x > width  - 1) {
+            } else {
+                for (int i = 0; i < layer.getData().size(); i++) {
+                    if (x > width - 1) {
                         x = 0;
                         y++;
                     }
 
-                    if(layer.getData().get(i) > 0) {
+                    if (layer.getData().get(i) > 0) {
                         tileMap[y][x] = new Tile(tilesets.get(layer.getData().get(i) - 1), x, y, tileWidth, tileHeight, scale, false);
                     }
 
@@ -99,9 +94,9 @@ public class Map {
             }
         }
 
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
-                if(collisionTiles[y][x].getIsWall()) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (collisionTiles[y][x].getIsWall()) {
                     tileMap[y][x].setIsWall(true, Integer.MAX_VALUE);
                 }
             }
@@ -109,8 +104,8 @@ public class Map {
     }
 
     public void draw(FXGraphics2D graphics) {
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 tileMap[y][x].draw(graphics);
             }
         }

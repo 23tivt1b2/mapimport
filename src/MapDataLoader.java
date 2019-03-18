@@ -13,6 +13,7 @@ public class MapDataLoader {
     private int height;
     private boolean infinite;
     private ArrayList<Layer> layers;
+    private ArrayList<Area> areas;
     private int nextLayerId;
     private int nextObjectId;
     private String orientation;
@@ -29,6 +30,7 @@ public class MapDataLoader {
     private MapDataLoader() {
         tilesets = new ArrayList<>();
         layers = new ArrayList<>();
+        areas = new ArrayList<Area>();
     }
 
     public void loadJson(String fileName) {
@@ -45,6 +47,7 @@ public class MapDataLoader {
                 convertJsonTileToTiles(root.getJsonArray("tilesets"));
                 convertJsonLayersToLayers(root.getJsonArray("layers"));
                 convertJsonToVariables(root);
+
 
                 hasData = true;
 
@@ -75,17 +78,22 @@ public class MapDataLoader {
     }
 
     private void convertJsonLayersToLayers(JsonArray array) {
-        for (int i = 0; i < array.size(); i++) {
-            Layer layer = new Layer();
 
-            JsonArray dataLayer = array.getJsonObject(i).getJsonArray("data");
-            if(array.getJsonObject(i).getString("name").equals("Area")){
-                convertJsonToObject(array);
-            }else {
+        for(int i = 0; i < array.size(); i++) {
+            JsonArray objects = null;
+            objects = array.getJsonObject(i).getJsonArray("objects");
+            //check if the layer contains a objects array;
+            if(objects != null) {
+                convertJsonToObject(array.getJsonObject(i).getJsonArray("objects"));
+            } else {
+                Layer layer = new Layer();
+                JsonArray dataLayer = array.getJsonObject(i).getJsonArray("data");
                 ArrayList<Integer> data = new ArrayList<>();
+
                 for (int j = 0; j < dataLayer.size(); j++) {
                     data.add(dataLayer.getInt(j));
                 }
+
                 layer.setData(data);
 
                 layer.setHeight(array.getJsonObject(i).getInt("height"));
@@ -119,27 +127,17 @@ public class MapDataLoader {
     }
 
     private void convertJsonToObject(JsonArray array) {
-        for (int i = 0; i < array.size(); i++) {
-            Layer layer = new Layer();
-            JsonArray objectLayer = array.getJsonObject(i).getJsonArray("objects");
-            for (int j = 0; j < objectLayer.size(); j++) {
-                Area area = new Area();
-                area.setHeight(objectLayer.getJsonObject(i).getInt("height"));
-                area.setId(objectLayer.getJsonObject(i).getInt("id"));
-                area.setName(objectLayer.getJsonObject(i).getString("name"));
-                area.setWidth(objectLayer.getJsonObject(i).getInt("width"));
-                area.setX(objectLayer.getJsonObject(i).getInt("x"));
-                area.setY(objectLayer.getJsonObject(i).getInt("y"));
-                layer.addArea(area);
-            }
-            layer.setId(array.getJsonObject(i).getInt("id"));
-            layer.setName(array.getJsonObject(i).getString("name"));
-            layer.setOpacity(array.getJsonObject(i).getInt("opacity"));
-            layer.setType(array.getJsonObject(i).getString("type"));
-            layer.setVisible(array.getJsonObject(i).getBoolean("visible"));
-            layer.setX(array.getJsonObject(i).getInt("x"));
-            layer.setY(array.getJsonObject(i).getInt("y"));
+        Area area;
 
+        for(int i = 0; i < array.size(); i++) {
+            area = new Area();
+            area.setHeight(array.getJsonObject(i).getInt("height"));
+            area.setId(array.getJsonObject(i).getInt("id"));
+            area.setName(array.getJsonObject(i).getString("name"));
+            area.setWidth(array.getJsonObject(i).getInt("width"));
+            area.setX(array.getJsonObject(i).getInt("x"));
+            area.setY(array.getJsonObject(i).getInt("y"));
+            areas.add(area);
         }
     }
 
@@ -209,5 +207,13 @@ public class MapDataLoader {
 
     public int getWidth() {
         return width;
+    }
+
+    public ArrayList<Area> getAreas() {
+        return areas;
+    }
+
+    public void setAreas(ArrayList<Area> areas) {
+        this.areas = areas;
     }
 }

@@ -18,7 +18,7 @@ public class Layer {
     private int y;
 
     public Layer() {
-
+        areas = new ArrayList<>();
     }
 
     public Layer(ArrayList<BufferedImage> images){

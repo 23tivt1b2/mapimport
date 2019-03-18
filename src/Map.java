@@ -1,8 +1,8 @@
 import Json.Layer;
 import Json.Tileset;
-import org.jfree.fx.FXGraphics2D;
-
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -12,6 +12,7 @@ import java.util.LinkedList;
 public class Map {
 
     private ArrayList<BufferedImage> tilesets;
+    private BufferedImage cacheImage;
     private int width;
     private int height;
     private int tileWidth;
@@ -37,7 +38,14 @@ public class Map {
             this.collisionTiles = new Tile[height][width];
 
             initializeMap();
+            redrawCache();
         }
+    }
+
+    public void redrawCache(){
+        cacheImage = new BufferedImage(1920,1080,BufferedImage.TYPE_INT_ARGB);
+        Graphics2D imageGraphics = cacheImage.createGraphics();
+        drawCache(imageGraphics);
     }
 
     private void initializeMap() {
@@ -103,7 +111,10 @@ public class Map {
         }
     }
 
-    public void draw(FXGraphics2D graphics) {
+    public void draw(Graphics2D graphics){
+        graphics.drawImage(cacheImage,new AffineTransform(),null);
+    }
+    public void drawCache(Graphics2D graphics) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 tileMap[y][x].draw(graphics);

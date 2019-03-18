@@ -39,7 +39,7 @@ public class Tile {
 
     }
 
-    public void draw(FXGraphics2D g2d) {
+    public void draw(Graphics2D g2d) {
 
         this.tx = new AffineTransform();
         tx.translate((x) * (tileWidth * scale), y * (tileHeight * scale));

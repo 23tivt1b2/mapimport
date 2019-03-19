@@ -22,8 +22,6 @@ public class Person {
         this.movementSpeed = movementSpeed;
         this.movement = new Point2D.Double(0,0);
         this.hasArrived = false;
-
-        System.out.println(movementSpeed);
     }
 
     public void move(Location location) {

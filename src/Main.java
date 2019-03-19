@@ -52,36 +52,32 @@ public class Main extends Application {
         MapDataLoader.getInstance().loadJson("map.json");
         this.map = new Map();
 
-        Entrance.getInstance().addTileToEntrance(map.getTileMap()[0][3]);
-        Entrance.getInstance().addTileToEntrance(map.getTileMap()[0][4]);
-        Entrance.getInstance().addTileToEntrance(map.getTileMap()[0][5]);
-
         Random rnd = new Random();
         int maxMovementSpeed = 2;
 
-        locations = new ArrayList<>();
-        Location location = new Location(56, 58, map);
+        locations = this.map.getLocations();
+
+        for(Location location : locations) {
+            System.out.println(location.getName());
+            if(location.getName().toLowerCase().equals("entrance")) {
+                for(int x = 0; x < location.getZoneX(); x++) {
+                    Entrance.getInstance().addTileToEntrance(map.getTileMap()[location.getZoneY() + 1][location.getZoneX() + x]);
+                }
+                for(int y = 0; y < location.getZoneY(); y++) {
+                    Entrance.getInstance().addTileToEntrance(map.getTileMap()[location.getZoneY() + 1 + y][location.getZoneX()]);
+                }
+            }
+        }
 
         for(int i = 0; i < 10; i++) {
             int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
             //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
             int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
             Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+
+            Location location = locations.get(rnd.nextInt(locations.size()));;
             location.addVisitor(person);
         }
-
-        locations.add(location);
-
-        Location location2 = new Location(50, 14, map);
-        for(int i = 0; i < 10; i++) {
-            int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
-            //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
-            int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
-            Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
-            location2.addVisitor(person);
-        }
-
-        locations.add(location2);
     }
 
 
@@ -105,9 +101,11 @@ public class Main extends Application {
     }
 
     private void update(double deltaTime) {
+
         for(Location location : locations) {
             location.updateVisitors();
         }
+
     }
 
 

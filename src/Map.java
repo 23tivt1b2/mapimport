@@ -20,9 +20,11 @@ public class Map {
 
     private Tile[][] tileMap;
     private Tile[][] collisionTiles;
+    private ArrayList<Location> locations;
 
     public Map() {
         this.tilesets = new ArrayList<>();
+        this.locations = new ArrayList<>();
 
         if (MapDataLoader.getInstance().getHasData()) {
             this.width = MapDataLoader.getInstance().getWidth();
@@ -84,10 +86,7 @@ public class Map {
                     }
                     x++;
                 }
-            }else if(layer.getName().equals("Area")){
-                        layer.getAreas();
-                }
-
+            }
              else {
                 for (int i = 0; i < layer.getData().size(); i++) {
                     if (x > width - 1) {
@@ -110,6 +109,17 @@ public class Map {
                     tileMap[y][x].setIsWall(true, Integer.MAX_VALUE);
                 }
             }
+        }
+
+        for(Area area : MapDataLoader.getInstance().getAreas()) {
+            int zoneWidht = (int)area.getWidth() / MapDataLoader.getInstance().getTileWidth();
+            int zoneHeight = (int)area.getHeight() / MapDataLoader.getInstance().getTileHeight();
+
+            int x = (int)area.getX() / MapDataLoader.getInstance().getTileWidth();
+            int y = (int)area.getY() / MapDataLoader.getInstance().getTileHeight();
+
+            Location location = new Location(x, y, area.getName(), zoneWidht, zoneHeight, this);
+            locations.add(location);
         }
     }
 
@@ -134,5 +144,9 @@ public class Map {
 
     public int getHeight() {
         return height;
+    }
+
+    public ArrayList<Location> getLocations() {
+        return locations;
     }
 }

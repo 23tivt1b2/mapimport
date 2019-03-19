@@ -12,17 +12,25 @@ public class Location {
     private int zoneX;
     private int zoneY;
 
+    private int width;
+    private int height;
+
+    private String name;
+
     private ArrayList<Tile> allTiles;
 
-    public Location(int x, int y, Map map) {
+    public Location(int zoneX, int zoneY, String name, int width, int height, Map map) {
         this.map = map;
         this.persons = new ArrayList<>();
 
-        this.zoneX = x;
-        this.zoneY = y;
+        this.name = name;
+        this.zoneX = zoneX;
+        this.zoneY = zoneY;
+        this.width = width;
+        this.height = height;
 
         initMap();
-        generateHeatMap(x, y);
+        generateHeatMap(zoneX, zoneY);
         initAllTiles();
     }
 
@@ -201,5 +209,25 @@ public class Location {
     private void markTile(Tile tile, int distanceNeighboor) {
         tile.setDistanceSet(true);
         tile.setDistanceTo(distanceNeighboor + 1);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public int getZoneX() {
+        return this.zoneX;
+    }
+
+    public int getZoneY() {
+        return this.zoneY;
     }
 }

@@ -41,6 +41,10 @@ public class Clock {
         }
     }
 
+    public String getTime() {
+        return this.hours + ":" + this.minutes + ":" + this.seconds;
+    }
+
     public static Clock getInstance() {
         if(clock == null) {
             clock = new Clock();

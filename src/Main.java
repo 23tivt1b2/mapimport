@@ -22,6 +22,10 @@ public class Main extends Application {
     private Map map;
     private Agenda agenda;
 
+    private double timer;
+    private Random rnd = new Random();
+    private final int MAX_MOVEMENT_SPEED = 2;
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -68,10 +72,11 @@ public class Main extends Application {
                 for(int y = 0; y < location.getZoneY(); y++) {
                     Entrance.getInstance().addTileToEntrance(map.getTileMap()[location.getZoneY() + 1 + y][location.getZoneX()]);
                 }
+                locations.remove(location);
             }
         }
 
-        for(int i = 0; i < 10; i++) {
+        /*for(int i = 0; i < 10; i++) {
             int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
             //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
             int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
@@ -81,7 +86,7 @@ public class Main extends Application {
 
             Location location = locations.get(rnd.nextInt(locations.size()));
             location.addVisitor(person);
-        }
+        }*/
 
         this.agenda = new Agenda();
 
@@ -118,6 +123,30 @@ public class Main extends Application {
 
         for(Location location : locations) {
             location.updateVisitors();
+        }
+
+        Clock.getInstance().addSecond();
+
+        System.out.println(Clock.getInstance().getTime());
+
+        if(timer > 0.5) {
+            timer = 0;
+
+
+            int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
+            //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
+            int movementSpeed = rnd.nextInt(MAX_MOVEMENT_SPEED - 1);
+            Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+
+            AllPersons.getInstance().addPerson(person);
+
+            Location location = locations.get(rnd.nextInt(locations.size()));
+            location.addVisitor(person);
+
+            System.out.println(AllPersons.getInstance().getPersons().size());
+        }
+        else {
+            timer+=deltaTime;
         }
 
     }

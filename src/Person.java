@@ -100,7 +100,7 @@ public class Person {
 
                     for (Person person : AllPersons.getInstance().getAllPersons()) {
                         if(!person.equals(this)) {
-                            if(person.getOldPosition().distance(this.newPosition) < 2.5) {
+                            if(!(person.getOldPosition().distance(this.newPosition) < 2.5)) {
                                 this.oldPosition = this.newPosition;
                             }
                         }
@@ -116,7 +116,7 @@ public class Person {
     }
 
     public Point2D getPosition() {
-        return this.position;
+        return this.oldPosition;
     }
 
     public boolean getHasArrived() {

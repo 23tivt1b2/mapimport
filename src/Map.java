@@ -107,6 +107,7 @@ public class Map {
             for (int x = 0; x < width; x++) {
                 if (collisionTiles[y][x].getIsWall()) {
                     tileMap[y][x].setIsWall(true, Integer.MAX_VALUE);
+                    AllWalls.getInstance().addWall(tileMap[y][x]);
                 }
             }
         }

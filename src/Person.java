@@ -118,11 +118,18 @@ public class Person {
                         }
                     }
                     for (Tile tile : AllWalls.getInstance().getAllWalls()) {
-                        if(tile.getRealCenter().distance(this.newPosition) < 5) {
-                            this.canMove = false;
-                            //System.out.println("COLLISION");
-                            break;
+                        if(tile.getRealPosition().getX() < this.getNewPosition().getX() + this.width && tile.getRealPosition().getX() + tile.getTileWidth() > this.getNewPosition().getX()) {
+                            if(tile.getRealPosition().getY() < this.getNewPosition().getY() + this.height && tile.getRealPosition().getY() + tile.getTileHeight() > this.getNewPosition().getY()) {
+                                this.canMove = false;
+                                System.out.println("COLLISION");
+                                break;
+                            }
                         }
+                        //if(tile.getRealCenter().distance(this.newPosition) < 5) {
+                        //    this.canMove = false;
+                        //    System.out.println("COLLISION");
+                        //    break;
+                        //}
                     }
                     if(this.canMove) {
                         this.oldPosition = this.newPosition;

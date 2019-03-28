@@ -11,6 +11,7 @@ public class Location {
     private ArrayList<Person> persons;
     private int zoneX;
     private int zoneY;
+    private Point2D position;
 
     private int width;
     private int height;
@@ -19,7 +20,7 @@ public class Location {
 
     private ArrayList<Tile> allTiles;
 
-    public Location(int zoneX, int zoneY, String name, int width, int height, Map map) {
+    public Location(int zoneX, int zoneY, String name, int width, int height, Map map, Point2D position) {
         this.map = map;
         this.persons = new ArrayList<>();
 
@@ -28,6 +29,7 @@ public class Location {
         this.zoneY = zoneY;
         this.width = width;
         this.height = height;
+        this.position = position;
 
         initMap();
         generateHeatMap(zoneX, zoneY);
@@ -201,6 +203,10 @@ public class Location {
     private void markTile(Tile tile, int distanceNeighboor) {
         tile.setDistanceSet(true);
         tile.setDistanceTo(distanceNeighboor + 1);
+    }
+
+    public Point2D getPosition() {
+        return position;
     }
 
     public String getName() {

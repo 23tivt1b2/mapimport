@@ -1,3 +1,5 @@
+import java.time.LocalTime;
+
 public class Clock {
 
     private int seconds;
@@ -5,6 +7,8 @@ public class Clock {
     private int hours;
 
     private static Clock clock;
+
+    private LocalTime endTime;
 
     private Clock() {
         this.seconds = 0;
@@ -16,6 +20,10 @@ public class Clock {
         this.seconds = seconds;
         this.minutes = minutes;
         this.hours = hours;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
     public void addSecond() {
@@ -39,6 +47,25 @@ public class Clock {
         if(hours >= 24) {
             hours = 0;
         }
+    }
+
+    public boolean isTimeUp() {
+        return hasTimePassed(endTime);
+    }
+
+    public boolean hasTimePassed(LocalTime localTime) {
+        if(this.hours >= localTime.getHour()) {
+            if(this.minutes >= localTime.getMinute()) {
+                if(this.seconds >= localTime.getSecond()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public LocalTime getLocalTime() {
+        return LocalTime.of(hours,minutes,seconds);
     }
 
     public String getTime() {

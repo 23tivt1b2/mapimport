@@ -1,3 +1,4 @@
+import data.Performance;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -22,16 +23,17 @@ public class Main extends Application {
     private Map map;
     private Agenda agenda;
 
-    private ArrayList<Tile> entrances;
-    private ArrayList<Tile> stages;
-    private ArrayList<Tile> bars;
-    private ArrayList<Tile> bathrooms;
-    private ArrayList<Tile> artistEntrance;
-    private ArrayList<Tile> exits;
+    private ArrayList<Location> entrances;
+    private ArrayList<Location> stages;
+    private ArrayList<Location> bars;
+    private ArrayList<Location> bathrooms;
+    private ArrayList<Location> artistEntrance;
+    private ArrayList<Location> exits;
 
     private double timer;
     private Random rnd = new Random();
     private final int MAX_MOVEMENT_SPEED = 2;
+    private boolean timeElapsed;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -77,47 +79,43 @@ public class Main extends Application {
 
         for(Location location : locations) {
             if(location.getName().toLowerCase().equals("entrance")) {
-                for(int x = 0; x < location.getZoneX(); x++) {
-                    this.entrances.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX() + x]);
-                }
-                for(int y = 0; y < location.getZoneY(); y++) {
-                    this.entrances.add(map.getTileMap()[location.getZoneY() + 1 + y][location.getZoneX()]);
-                }
+                this.entrances.add(location);
+
                 locationsOfLimits.add(location);
                 continue;
             }
 
             if(location.getName().toLowerCase().contains("stage") || location.getName().toLowerCase().contains("waitingroom")) {
 
-                this.stages.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+                this.stages.add(location);
 
                 locationsOfLimits.add(location);
                 continue;
             }
 
             if(location.getName().toLowerCase().contains("bar")) {
-                this.bars.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+                this.bars.add(location);
 
                 locationsOfLimits.add(location);
                 continue;
             }
 
             if(location.getName().toLowerCase().contains("bathroom")) {
-                this.bathrooms.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+                this.bathrooms.add(location);
 
                 locationsOfLimits.add(location);
                 continue;
             }
 
             if(location.getName().toLowerCase().equals("artistentrance")) {
-                this.artistEntrance.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+                this.artistEntrance.add(location);
 
                 locationsOfLimits.add(location);
                 continue;
             }
 
             if(location.getName().toLowerCase().equals("exit")) {
-                this.exits.add(map.getTileMap()[location.getZoneY()][location.getZoneX()]);
+                this.exits.add(location);
 
                 locationsOfLimits.add(location);
                 continue;
@@ -137,6 +135,11 @@ public class Main extends Application {
         System.out.println(startTime);
         System.out.println(endtime);
 
+        startTime = startTime.plusMinutes(25);
+
+        Clock.getInstance().setStartTime(startTime.getSecond(), startTime.getMinute(), startTime.getHour());
+        Clock.getInstance().setEndTime(endtime);
+
     }
 
 
@@ -152,7 +155,24 @@ public class Main extends Application {
 
         this.map.draw(graphics);
 
+
         for(Location location : locations) {
+            location.drawVisitors(graphics);
+        }
+
+        for(Location location : exits) {
+            location.drawVisitors(graphics);
+        }
+
+        for(Location location : stages) {
+            location.drawVisitors(graphics);
+        }
+
+        for(Location location : bathrooms) {
+            location.drawVisitors(graphics);
+        }
+
+        for(Location location : bars) {
             location.drawVisitors(graphics);
         }
 
@@ -165,29 +185,62 @@ public class Main extends Application {
             location.updateVisitors();
         }
 
-        Clock.getInstance().addSecond();
+        for(Location location : exits) {
+            location.updateVisitors();
+        }
 
-        if(timer > 0.5) {
-            if(AllPersons.getInstance().getAllPersons().size() < 500) {
-                timer = 0;
+        for(Location location : stages) {
+            location.updateVisitors();
+        }
 
-                int entranceTileNumber = rnd.nextInt(this.entrances.size());
-                //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
-                int movementSpeed = rnd.nextInt(MAX_MOVEMENT_SPEED - 1);
-                Person person = new Person(new Point2D.Double(this.entrances.get(entranceTileNumber).getRealPosition().getX(), this.entrances.get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+        for(Location location : bathrooms) {
+            location.updateVisitors();
+        }
 
-                AllPersons.getInstance().addPerson(person);
+        for(Location location : bars) {
+            location.updateVisitors();
+        }
 
-                Location location = locations.get(rnd.nextInt(locations.size()));
-                location.addVisitor(person);
-
-                System.out.println(location.getName());
+        if(timeElapsed) {
+            for(Location location : exits) {
+                location.updateVisitors();
             }
         }
         else {
-            timer+=deltaTime;
-        }
+            Clock.getInstance().addSecond();
 
+            if(Clock.getInstance().isTimeUp()) {
+                timeElapsed = true;
+                for(Location location : locations) {
+                    location.removeVisitors();
+                }
+
+                for(Person person : AllPersons.getInstance().getPersons()) {
+                    exits.get(0).addVisitor(person);
+                }
+            }
+            else {
+                if(timer > 0.5) {
+                    if(AllPersons.getInstance().getAllPersons().size() < 500) {
+                        timer = 0;
+
+                        int entranceTileNumber = rnd.nextInt(this.entrances.size());
+                        //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
+                        int movementSpeed = rnd.nextInt(MAX_MOVEMENT_SPEED - 1);
+                        Point2D pos = new Point2D.Double(this.entrances.get(entranceTileNumber).getPosition().getX(), this.entrances.get(entranceTileNumber).getPosition().getY());
+                        Person person = new Person(pos, 5, 5, movementSpeed + 1);
+
+                        AllPersons.getInstance().addPerson(person);
+
+                        Location location = locations.get(rnd.nextInt(locations.size()));
+                        location.addVisitor(person);
+                    }
+                }
+                else {
+                    timer+=deltaTime;
+                }
+            }
+        }
     }
 
 

@@ -4,6 +4,7 @@ import Json.Tileset;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -119,7 +120,7 @@ public class Map {
             int x = (int)area.getX() / MapDataLoader.getInstance().getTileWidth();
             int y = (int)area.getY() / MapDataLoader.getInstance().getTileHeight();
 
-            Location location = new Location(x, y, area.getName(), zoneWidht, zoneHeight, this);
+            Location location = new Location(x + 1, y, area.getName(), zoneWidht, zoneHeight, this, new Point2D.Double(area.getX() + 1, area.getY()));
             locations.add(location);
         }
     }
@@ -127,6 +128,7 @@ public class Map {
     public void draw(Graphics2D graphics){
         graphics.drawImage(cacheImage,new AffineTransform(),null);
     }
+
     public void drawCache(Graphics2D graphics) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

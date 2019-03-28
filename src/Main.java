@@ -19,6 +19,7 @@ public class Main extends Application {
     private Camera camera;
     private ArrayList<Location> locations;
     private Map map;
+    private Agenda agenda;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -74,10 +75,12 @@ public class Main extends Application {
             //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
             int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
             Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
-
+            AllPersons.getInstance().addPerson(person);
             Location location = locations.get(rnd.nextInt(locations.size()));;
             location.addVisitor(person);
         }
+
+        this.agenda = new Agenda();
     }
 
 

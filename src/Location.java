@@ -60,22 +60,14 @@ public class Location {
 
     public void updateVisitors() {
 
-        boolean everyoneHere = true;
-
         for(Person p : persons) {
             p.move(this);
-            if(!p.getHasArrived()) {
-                everyoneHere = false;
-            }
         }
 
-        if(everyoneHere) {
-            generateHeatMap(5, 0);
+    }
 
-            for(Person p : persons) {
-                p.setHasArrived(false);
-            }
-        }
+    public void removeVisitors() {
+        this.persons.clear();
     }
 
     public void drawVisitors(FXGraphics2D g2d) {

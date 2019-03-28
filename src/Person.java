@@ -69,6 +69,7 @@ public class Person {
 
                     Direction direction = null;
 
+
                     if(this.oldPosition.getX() < lowestTile.getRealPosition().getX()) {
                         direction = Direction.RIGHT;
                     }
@@ -81,6 +82,7 @@ public class Person {
                     else if(this.oldPosition.getY() > lowestTile.getRealPosition().getY()) {
                         direction = Direction.UP;
                     }
+                    
                     if (!this.canMove) {
                         direction = randomDirection(direction);
                     }

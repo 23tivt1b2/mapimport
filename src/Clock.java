@@ -6,7 +6,13 @@ public class Clock {
 
     private static Clock clock;
 
-    private Clock(int seconds, int minutes, int hours) {
+    private Clock() {
+        this.seconds = 0;
+        this.minutes = 0;
+        this.hours = 0;
+    }
+
+    public void setStartTime(int seconds, int minutes, int hours) {
         this.seconds = seconds;
         this.minutes = minutes;
         this.hours = hours;
@@ -35,9 +41,9 @@ public class Clock {
         }
     }
 
-    public Clock getInstance() {
+    public static Clock getInstance() {
         if(clock == null) {
-            clock = new Clock(0,0,0);
+            clock = new Clock();
         }
         return clock;
     }

@@ -10,6 +10,7 @@ import org.jfree.fx.ResizableCanvas;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -75,12 +76,22 @@ public class Main extends Application {
             //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
             int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
             Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+
             AllPersons.getInstance().addPerson(person);
-            Location location = locations.get(rnd.nextInt(locations.size()));;
+
+            Location location = locations.get(rnd.nextInt(locations.size()));
             location.addVisitor(person);
         }
 
         this.agenda = new Agenda();
+
+        LocalTime startTime = this.agenda.getAgenda().getTimeList().get(0);
+        LocalTime endtime = this.agenda.getAgenda().getTimeList().get(this.agenda.getAgenda().getTimeList().size() - 1);
+        endtime = endtime.plusMinutes(30);
+
+        System.out.println(startTime);
+        System.out.println(endtime);
+
     }
 
 

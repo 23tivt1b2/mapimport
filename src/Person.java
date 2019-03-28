@@ -108,7 +108,6 @@ public class Person {
 
                     for (Person person : AllPersons.getInstance().getAllPersons()) {
                         if(!person.equals(this)) {
-
                             if(person.getOldPosition().distance(this.newPosition) < 2.5) {
                                 this.canMove = false;
                                 System.out.println("COLLISION");
@@ -116,6 +115,13 @@ public class Person {
                             } else {
                                 this.canMove = true;
                             }
+                        }
+                    }
+                    for (Tile tile : AllWalls.getInstance().getAllWalls()) {
+                        if(tile.getRealPosition().distance(this.newPosition) < 6) {
+                            this.canMove = false;
+                            System.out.println("COLLISION");
+                            break;
                         }
                     }
                     if(this.canMove) {

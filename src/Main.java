@@ -22,6 +22,13 @@ public class Main extends Application {
     private Map map;
     private Agenda agenda;
 
+    private ArrayList<Tile> entrances;
+    private ArrayList<Tile> stages;
+    private ArrayList<Tile> bars;
+    private ArrayList<Tile> bathrooms;
+    private ArrayList<Tile> artistEntrance;
+    private ArrayList<Tile> exits;
+
     private double timer;
     private Random rnd = new Random();
     private final int MAX_MOVEMENT_SPEED = 2;
@@ -58,35 +65,68 @@ public class Main extends Application {
         MapDataLoader.getInstance().loadJson("map.json");
         this.map = new Map();
 
-        Random rnd = new Random();
-        int maxMovementSpeed = 2;
-
         locations = this.map.getLocations();
+        this.entrances = new ArrayList<>();
+        this.stages = new ArrayList<>();
+        this.bars = new ArrayList<>();
+        this.bathrooms = new ArrayList<>();
+        this.artistEntrance = new ArrayList<>();
+        this.exits = new ArrayList<>();
+
+        ArrayList<Location> locationsOfLimits = new ArrayList<>();
 
         for(Location location : locations) {
-            System.out.println(location.getName());
             if(location.getName().toLowerCase().equals("entrance")) {
                 for(int x = 0; x < location.getZoneX(); x++) {
-                    Entrance.getInstance().addTileToEntrance(map.getTileMap()[location.getZoneY() + 1][location.getZoneX() + x]);
+                    this.entrances.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX() + x]);
                 }
                 for(int y = 0; y < location.getZoneY(); y++) {
-                    Entrance.getInstance().addTileToEntrance(map.getTileMap()[location.getZoneY() + 1 + y][location.getZoneX()]);
+                    this.entrances.add(map.getTileMap()[location.getZoneY() + 1 + y][location.getZoneX()]);
                 }
-                locations.remove(location);
+                locationsOfLimits.add(location);
+                continue;
+            }
+
+            if(location.getName().toLowerCase().contains("stage") || location.getName().toLowerCase().contains("waitingroom")) {
+
+                this.stages.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+
+                locationsOfLimits.add(location);
+                continue;
+            }
+
+            if(location.getName().toLowerCase().contains("bar")) {
+                this.bars.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+
+                locationsOfLimits.add(location);
+                continue;
+            }
+
+            if(location.getName().toLowerCase().contains("bathroom")) {
+                this.bathrooms.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+
+                locationsOfLimits.add(location);
+                continue;
+            }
+
+            if(location.getName().toLowerCase().equals("artistentrance")) {
+                this.artistEntrance.add(map.getTileMap()[location.getZoneY() + 1][location.getZoneX()]);
+
+                locationsOfLimits.add(location);
+                continue;
+            }
+
+            if(location.getName().toLowerCase().equals("exit")) {
+                this.exits.add(map.getTileMap()[location.getZoneY()][location.getZoneX()]);
+
+                locationsOfLimits.add(location);
+                continue;
             }
         }
 
-        /*for(int i = 0; i < 10; i++) {
-            int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
-            //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
-            int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
-            Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
-
-            AllPersons.getInstance().addPerson(person);
-
-            Location location = locations.get(rnd.nextInt(locations.size()));
-            location.addVisitor(person);
-        }*/
+        for(Location location : locationsOfLimits) {
+            this.locations.remove(location);
+        }
 
         this.agenda = new Agenda();
 
@@ -127,23 +167,20 @@ public class Main extends Application {
 
         Clock.getInstance().addSecond();
 
-        System.out.println(Clock.getInstance().getTime());
-
         if(timer > 0.5) {
             timer = 0;
 
-
-            int entranceTileNumber = rnd.nextInt(Entrance.getInstance().getPositions().size());
+            int entranceTileNumber = rnd.nextInt(this.entrances.size());
             //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
             int movementSpeed = rnd.nextInt(MAX_MOVEMENT_SPEED - 1);
-            Person person = new Person(new Point2D.Double(Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getX(), Entrance.getInstance().getPositions().get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+            Person person = new Person(new Point2D.Double(this.entrances.get(entranceTileNumber).getRealPosition().getX(), this.entrances.get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
 
             AllPersons.getInstance().addPerson(person);
 
             Location location = locations.get(rnd.nextInt(locations.size()));
             location.addVisitor(person);
 
-            System.out.println(AllPersons.getInstance().getPersons().size());
+            System.out.println(location.getName());
         }
         else {
             timer+=deltaTime;

@@ -12,6 +12,7 @@ public class Person {
     private int width;
     private int height;
     private int movementSpeed;
+    private Boolean canMove = true;
 
     private boolean hasArrived;
 
@@ -100,10 +101,17 @@ public class Person {
 
                     for (Person person : AllPersons.getInstance().getAllPersons()) {
                         if(!person.equals(this)) {
-                            if(!(person.getOldPosition().distance(this.newPosition) < 2.5)) {
-                                this.oldPosition = this.newPosition;
+
+                            if((person.getOldPosition().distance(this.newPosition) < 2.5)) {
+                                this.canMove = false;
+                                break;
+                            } else {
+                                this.canMove = true;
                             }
                         }
+                    }
+                    if(this.canMove) {
+                        this.oldPosition = this.newPosition;
                     }
                 }
             }

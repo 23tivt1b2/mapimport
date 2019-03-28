@@ -168,19 +168,21 @@ public class Main extends Application {
         Clock.getInstance().addSecond();
 
         if(timer > 0.5) {
-            timer = 0;
+            if(AllPersons.getInstance().getAllPersons().size() < 500) {
+                timer = 0;
 
-            int entranceTileNumber = rnd.nextInt(this.entrances.size());
-            //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
-            int movementSpeed = rnd.nextInt(MAX_MOVEMENT_SPEED - 1);
-            Person person = new Person(new Point2D.Double(this.entrances.get(entranceTileNumber).getRealPosition().getX(), this.entrances.get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
+                int entranceTileNumber = rnd.nextInt(this.entrances.size());
+                //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
+                int movementSpeed = rnd.nextInt(MAX_MOVEMENT_SPEED - 1);
+                Person person = new Person(new Point2D.Double(this.entrances.get(entranceTileNumber).getRealPosition().getX(), this.entrances.get(entranceTileNumber).getRealPosition().getY()), 5, 5, movementSpeed + 1);
 
-            AllPersons.getInstance().addPerson(person);
+                AllPersons.getInstance().addPerson(person);
 
-            Location location = locations.get(rnd.nextInt(locations.size()));
-            location.addVisitor(person);
+                Location location = locations.get(rnd.nextInt(locations.size()));
+                location.addVisitor(person);
 
-            System.out.println(location.getName());
+                System.out.println(location.getName());
+            }
         }
         else {
             timer+=deltaTime;

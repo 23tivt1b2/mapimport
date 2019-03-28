@@ -10,6 +10,10 @@ public class AllPersons {
         this.persons = new ArrayList<>();
     }
 
+    public ArrayList<Person> getAllPersons() {
+        return persons;
+    }
+
     public void addPerson(Person person) {
         this.persons.add(person);
     }

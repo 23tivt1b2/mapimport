@@ -14,6 +14,8 @@ public class Person {
     private int movementSpeed;
     private Boolean canMove = true;
 
+    private int randomFactor;
+
     private boolean hasArrived;
 
     public Person(Point2D position, int width, int height, int movementSpeed) {
@@ -67,6 +69,7 @@ public class Person {
 
                     Direction direction = null;
 
+
                     if(this.oldPosition.getX() < lowestTile.getRealPosition().getX()) {
                         direction = Direction.RIGHT;
                     }
@@ -78,6 +81,10 @@ public class Person {
                     }
                     else if(this.oldPosition.getY() > lowestTile.getRealPosition().getY()) {
                         direction = Direction.UP;
+                    }
+
+                    if (!this.canMove) {
+                        direction = randomDirection(direction);
                     }
 
                     switch (direction) {
@@ -102,8 +109,9 @@ public class Person {
                     for (Person person : AllPersons.getInstance().getAllPersons()) {
                         if(!person.equals(this)) {
 
-                            if((person.getOldPosition().distance(this.newPosition) < 2.5)) {
+                            if(person.getOldPosition().distance(this.newPosition) < 2.5) {
                                 this.canMove = false;
+                                System.out.println("COLLISION");
                                 break;
                             } else {
                                 this.canMove = true;
@@ -123,8 +131,27 @@ public class Person {
         g2d.fillRect((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
     }
 
-    public Point2D getPosition() {
-        return this.oldPosition;
+    public Direction randomDirection(Direction direction) {
+        this.randomFactor = (int)(Math.random()*4);
+        switch (this.randomFactor) {
+            case 1:
+                direction = Direction.UP;
+                break;
+            case 2:
+                direction = Direction.DOWN;
+                break;
+            case 3:
+                direction = Direction.LEFT;
+                break;
+            case 4:
+                direction = Direction.RIGHT;
+                break;
+        }
+        return direction;
+    }
+
+    public Point2D getNewPosition() {
+        return this.newPosition;
     }
 
     public boolean getHasArrived() {

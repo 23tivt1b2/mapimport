@@ -105,6 +105,10 @@ public class Person {
         g2d.fillRect((int)this.position.getX(), (int)this.position.getY(), this.width, this.height);
     }
 
+    public Point2D getPosition() {
+        return this.position;
+    }
+
     public boolean getHasArrived() {
         return this.hasArrived;
     }

@@ -14,6 +14,10 @@ public class AllPersons {
         this.persons.add(person);
     }
 
+    public ArrayList<Person> getPersons() {
+        return this.persons;
+    }
+
     public static AllPersons getInstance() {
         if(instance == null) {
             instance = new AllPersons();

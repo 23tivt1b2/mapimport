@@ -63,6 +63,10 @@ public class Tile {
         return new Point2D.Double((x) * (tileWidth * scale), y * (tileHeight * scale));
     }
 
+    public Point2D getRealCenter() {
+        return new Point2D.Double((x) + (tileWidth/2 * scale), y + (tileHeight/2 * scale));
+    }
+
     public int getX() {
         return x;
     }

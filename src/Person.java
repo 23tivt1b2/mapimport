@@ -143,19 +143,31 @@ public class Person {
         int randomFactor = (int) (Math.random() * 4);
         switch (randomFactor) {
             case 1:
-                direction = Direction.UP;
-                break;
+                if(direction.equals(Direction.UP)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.UP;
+                }
             case 2:
-                direction = Direction.DOWN;
-                break;
+                if(direction.equals(Direction.DOWN)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.DOWN;
+                }
             case 3:
-                direction = Direction.LEFT;
-                break;
+                if(direction.equals(Direction.LEFT)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.LEFT;
+                }
             case 4:
-                direction = Direction.RIGHT;
-                break;
+                if(direction.equals(Direction.RIGHT)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.RIGHT;
+                }
         }
-        return direction;
+        return Direction.UP;
     }
 
     public Point2D getNewPosition() {

@@ -82,7 +82,7 @@ public class Person {
                     else if(this.oldPosition.getY() > lowestTile.getRealPosition().getY()) {
                         direction = Direction.UP;
                     }
-                    
+
                     if (!this.canMove) {
                         direction = randomDirection(direction);
                     }
@@ -109,7 +109,7 @@ public class Person {
                     for (Person person : AllPersons.getInstance().getAllPersons()) {
                         if(!person.equals(this)) {
 
-                            if((person.getOldPosition().distance(this.newPosition) < 2.5)) {
+                            if(person.getOldPosition().distance(this.newPosition) < 2.5) {
                                 this.canMove = false;
                                 System.out.println("COLLISION");
                                 break;
@@ -133,7 +133,6 @@ public class Person {
 
     public Direction randomDirection(Direction direction) {
         this.randomFactor = (int)(Math.random()*4);
-
         switch (this.randomFactor) {
             case 1:
                 direction = Direction.UP;
@@ -151,8 +150,8 @@ public class Person {
         return direction;
     }
 
-    public Point2D getPosition() {
-        return this.oldPosition;
+    public Point2D getNewPosition() {
+        return this.newPosition;
     }
 
     public boolean getHasArrived() {

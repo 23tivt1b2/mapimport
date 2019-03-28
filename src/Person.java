@@ -1,13 +1,13 @@
+import data.Performance;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Person {
 
-    private Point2D position;
+    private Point2D newPosition;
+    private Point2D oldPosition;
     private Point2D movement;
     private int width;
     private int height;
@@ -16,7 +16,7 @@ public class Person {
     private boolean hasArrived;
 
     public Person(Point2D position, int width, int height, int movementSpeed) {
-        this.position = position;
+        this.oldPosition = position;
         this.width = width;
         this.height = height;
         this.movementSpeed = movementSpeed;
@@ -26,8 +26,10 @@ public class Person {
 
     public void move(Location location) {
 
+        AllPersons.getInstance().getAllPersons();
+
         if (!this.hasArrived) {
-            Tile currentTile = location.findTile(this.position, this.width, this.height);
+            Tile currentTile = location.findTile(this.oldPosition, this.width, this.height);
 
             if(currentTile != null) {
 
@@ -64,16 +66,16 @@ public class Person {
 
                     Direction direction = null;
 
-                    if(this.position.getX() < lowestTile.getRealPosition().getX()) {
+                    if(this.oldPosition.getX() < lowestTile.getRealPosition().getX()) {
                         direction = Direction.RIGHT;
                     }
-                    else if(this.position.getX() > lowestTile.getRealPosition().getX()) {
+                    else if(this.oldPosition.getX() > lowestTile.getRealPosition().getX()) {
                         direction = Direction.LEFT;
                     }
-                    else if(this.position.getY() < lowestTile.getRealPosition().getY()) {
+                    else if(this.oldPosition.getY() < lowestTile.getRealPosition().getY()) {
                         direction = Direction.DOWN;
                     }
-                    else if(this.position.getY() > lowestTile.getRealPosition().getY()) {
+                    else if(this.oldPosition.getY() > lowestTile.getRealPosition().getY()) {
                         direction = Direction.UP;
                     }
 
@@ -94,7 +96,15 @@ public class Person {
                             break;
                     }
 
-                    this.position = new Point2D.Double(this.position.getX() + this.movement.getX(), this.position.getY() + this.movement.getY());
+                    this.newPosition = new Point2D.Double(this.oldPosition.getX() + this.movement.getX(), this.oldPosition.getY() + this.movement.getY());
+
+                    for (Person person : AllPersons.getInstance().getAllPersons()) {
+                        if(!person.equals(this)) {
+                            if(person.getOldPosition().distance(this.newPosition) < 2.5) {
+                                this.oldPosition = this.newPosition;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -102,7 +112,7 @@ public class Person {
 
     public void draw(FXGraphics2D g2d) {
         g2d.setColor(Color.GREEN);
-        g2d.fillRect((int)this.position.getX(), (int)this.position.getY(), this.width, this.height);
+        g2d.fillRect((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
     }
 
     public boolean getHasArrived() {
@@ -118,5 +128,9 @@ public class Person {
         LEFT,
         UP,
         DOWN
+    }
+
+    public Point2D getOldPosition() {
+        return this.oldPosition;
     }
 }

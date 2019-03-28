@@ -3,6 +3,7 @@ import javafx.scene.transform.Scale;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 public class Person {
@@ -107,7 +108,7 @@ public class Person {
 
                     for (Person person : AllPersons.getInstance().getAllPersons()) {
                         if(!person.equals(this)) {
-                            if(person.getOldPosition().distance(this.newPosition) < 2.5) {
+                            if(person.getOldPosition().distance(this.newPosition) < 3.0) {
                                 this.canMove = false;
                                 //System.out.println("COLLISION");
                                 break;
@@ -132,7 +133,8 @@ public class Person {
     }
 
     public void draw(FXGraphics2D g2d) {
-        Shape shape = new Rectangle((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
+        Shape shape = new Ellipse2D.Double((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
+        //Shape shape = new Rectangle((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
         g2d.setColor(Color.GREEN);
         g2d.fill(shape);
         g2d.setColor(Color.GRAY);

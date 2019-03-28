@@ -167,8 +167,8 @@ public class Main extends Application {
 
         Clock.getInstance().addSecond();
 
-        if(timer > 0.5) {
-            if(AllPersons.getInstance().getAllPersons().size() < 500) {
+        if(timer > 0.1) {
+            if(AllPersons.getInstance().getAllPersons().size() < 5000) {
                 timer = 0;
 
                 int entranceTileNumber = rnd.nextInt(this.entrances.size());

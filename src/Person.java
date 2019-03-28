@@ -15,8 +15,6 @@ public class Person {
     private int movementSpeed;
     private Boolean canMove = true;
 
-    private int randomFactor;
-
     private boolean hasArrived;
 
     public Person(Point2D position, int width, int height, int movementSpeed) {
@@ -119,7 +117,6 @@ public class Person {
                         }
                     }
                     for (Tile tile : AllWalls.getInstance().getAllWalls()) {
-                        //Point2D point2D = new Point2D.Double(tile.getRealPosition().getX() + tile.getTileWidth()/2, tile.getRealPosition().getY() + tile.getTileHeight()/2);
                         if(tile.getRealCenter().distance(this.newPosition) < 5) {
                             this.canMove = false;
                             //System.out.println("COLLISION");
@@ -135,13 +132,16 @@ public class Person {
     }
 
     public void draw(FXGraphics2D g2d) {
+        Shape shape = new Rectangle((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
         g2d.setColor(Color.GREEN);
-        g2d.fillRect((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
+        g2d.fill(shape);
+        g2d.setColor(Color.GRAY);
+        g2d.draw(shape);
     }
 
     public Direction randomDirection(Direction direction) {
-        this.randomFactor = (int)(Math.random()*4);
-        switch (this.randomFactor) {
+        int randomFactor = (int) (Math.random() * 4);
+        switch (randomFactor) {
             case 1:
                 direction = Direction.UP;
                 break;

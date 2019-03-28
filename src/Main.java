@@ -1,4 +1,5 @@
 import data.Performance;
+import gui.pages.timetable.PerformanceBox;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -7,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
+import sun.misc.Perf;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -27,8 +29,10 @@ public class Main extends Application {
     private ArrayList<Location> stages;
     private ArrayList<Location> bars;
     private ArrayList<Location> bathrooms;
-    private ArrayList<Location> artistEntrance;
+    private ArrayList<Location> artistEntranceAndExit;
     private ArrayList<Location> exits;
+
+    private LocationHandler locationHandler;
 
     private double timer;
     private Random rnd = new Random();
@@ -72,8 +76,10 @@ public class Main extends Application {
         this.stages = new ArrayList<>();
         this.bars = new ArrayList<>();
         this.bathrooms = new ArrayList<>();
-        this.artistEntrance = new ArrayList<>();
+        this.artistEntranceAndExit = new ArrayList<>();
         this.exits = new ArrayList<>();
+
+        this.locationHandler = new LocationHandler();
 
         ArrayList<Location> locationsOfLimits = new ArrayList<>();
 
@@ -108,7 +114,7 @@ public class Main extends Application {
             }
 
             if(location.getName().toLowerCase().equals("artistentrance")) {
-                this.artistEntrance.add(location);
+                this.artistEntranceAndExit.add(location);
 
                 locationsOfLimits.add(location);
                 continue;
@@ -132,14 +138,16 @@ public class Main extends Application {
         LocalTime endtime = this.agenda.getAgenda().getTimeList().get(this.agenda.getAgenda().getTimeList().size() - 1);
         endtime = endtime.plusMinutes(30);
 
-        System.out.println(startTime);
-        System.out.println(endtime);
-
-        startTime = startTime.plusMinutes(25);
-
         Clock.getInstance().setStartTime(startTime.getSecond(), startTime.getMinute(), startTime.getHour());
         Clock.getInstance().setEndTime(endtime);
 
+        this.locationHandler.addLocations(this.locations);
+        this.locationHandler.addLocations(this.entrances);
+        this.locationHandler.addLocations(this.bars);
+        this.locationHandler.addLocations(this.bathrooms);
+        this.locationHandler.addLocations(this.artistEntranceAndExit);
+        this.locationHandler.addLocations(this.exits);
+        this.locationHandler.addLocations(this.stages);
     }
 
 
@@ -155,72 +163,32 @@ public class Main extends Application {
 
         this.map.draw(graphics);
 
-
-        for(Location location : locations) {
-            location.drawVisitors(graphics);
-        }
-
-        for(Location location : exits) {
-            location.drawVisitors(graphics);
-        }
-
-        for(Location location : stages) {
-            location.drawVisitors(graphics);
-        }
-
-        for(Location location : bathrooms) {
-            location.drawVisitors(graphics);
-        }
-
-        for(Location location : bars) {
-            location.drawVisitors(graphics);
-        }
+        this.locationHandler.draw(graphics);
 
         graphics.setTransform(origianlTransform);
     }
 
     private void update(double deltaTime) {
 
-        for(Location location : locations) {
-            location.updateVisitors();
-        }
+        this.locationHandler.update();
 
-        for(Location location : exits) {
-            location.updateVisitors();
-        }
-
-        for(Location location : stages) {
-            location.updateVisitors();
-        }
-
-        for(Location location : bathrooms) {
-            location.updateVisitors();
-        }
-
-        for(Location location : bars) {
-            location.updateVisitors();
-        }
-
-
-        if(timeElapsed) {
-            for(Location location : exits) {
-                location.updateVisitors();
-            }
-        }
-        else {
+        if(!this.locationHandler.getTimeOver()) {
             Clock.getInstance().addSecond();
 
             if(Clock.getInstance().isTimeUp()) {
-                timeElapsed = true;
+                this.locationHandler.setTimeOver(true);
                 for(Location location : locations) {
                     location.removeVisitors();
                 }
 
                 for(Person person : AllPersons.getInstance().getPersons()) {
-                    exits.get(0).addVisitor(person);
+                    exits.get(rnd.nextInt(exits.size())).addVisitor(person);
                 }
             }
             else {
+
+                this.agenda.update(MAX_MOVEMENT_SPEED, rnd, this.artistEntranceAndExit, this.stages);
+
                 if(timer > 0.5) {
                     if(AllPersons.getInstance().getAllPersons().size() < 500) {
                         timer = 0;

@@ -205,6 +205,10 @@ public class Location {
         tile.setDistanceTo(distanceNeighboor + 1);
     }
 
+    public ArrayList<Person> getPersons() {
+        return this.persons;
+    }
+
     public Point2D getPosition() {
         return position;
     }

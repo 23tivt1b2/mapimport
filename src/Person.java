@@ -172,6 +172,18 @@ public class Person {
         return Direction.UP;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public int getMovementSpeed() {
+        return this.movementSpeed;
+    }
+
     public Point2D getNewPosition() {
         return this.newPosition;
     }

@@ -1,7 +1,9 @@
 import data.Performance;
+import javafx.scene.transform.Scale;
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
 public class Person {
@@ -13,8 +15,6 @@ public class Person {
     private int height;
     private int movementSpeed;
     private Boolean canMove = true;
-
-    private int randomFactor;
 
     private boolean hasArrived;
 
@@ -108,14 +108,20 @@ public class Person {
 
                     for (Person person : AllPersons.getInstance().getAllPersons()) {
                         if(!person.equals(this)) {
-
-                            if(person.getOldPosition().distance(this.newPosition) < 2.5) {
+                            if(person.getOldPosition().distance(this.newPosition) < 3.0) {
                                 this.canMove = false;
-                                System.out.println("COLLISION");
+                                //System.out.println("COLLISION");
                                 break;
                             } else {
                                 this.canMove = true;
                             }
+                        }
+                    }
+                    for (Tile tile : AllWalls.getInstance().getAllWalls()) {
+                        if(tile.getRealCenter().distance(this.newPosition) < 5) {
+                            this.canMove = false;
+                            //System.out.println("COLLISION");
+                            break;
                         }
                     }
                     if(this.canMove) {
@@ -127,27 +133,43 @@ public class Person {
     }
 
     public void draw(FXGraphics2D g2d) {
+        Shape shape = new Ellipse2D.Double((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
+        //Shape shape = new Rectangle((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
         g2d.setColor(Color.GREEN);
-        g2d.fillRect((int)this.oldPosition.getX(), (int)this.oldPosition.getY(), this.width, this.height);
+        g2d.fill(shape);
+        g2d.setColor(Color.GRAY);
+        g2d.draw(shape);
     }
 
     public Direction randomDirection(Direction direction) {
-        this.randomFactor = (int)(Math.random()*4);
-        switch (this.randomFactor) {
+        int randomFactor = (int) (Math.random() * 4);
+        switch (randomFactor) {
             case 1:
-                direction = Direction.UP;
-                break;
+                if(direction.equals(Direction.UP)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.UP;
+                }
             case 2:
-                direction = Direction.DOWN;
-                break;
+                if(direction.equals(Direction.DOWN)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.DOWN;
+                }
             case 3:
-                direction = Direction.LEFT;
-                break;
+                if(direction.equals(Direction.LEFT)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.LEFT;
+                }
             case 4:
-                direction = Direction.RIGHT;
-                break;
+                if(direction.equals(Direction.RIGHT)) {
+                    randomDirection(direction);
+                } else {
+                    return Direction.RIGHT;
+                }
         }
-        return direction;
+        return Direction.UP;
     }
 
     public Point2D getNewPosition() {

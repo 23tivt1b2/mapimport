@@ -201,6 +201,7 @@ public class Main extends Application {
             location.updateVisitors();
         }
 
+
         if(timeElapsed) {
             for(Location location : exits) {
                 location.updateVisitors();

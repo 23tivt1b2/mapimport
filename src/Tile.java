@@ -56,11 +56,14 @@ public class Tile {
         else {
             //g2d.drawString(distanceTo + "", (int)(x * (tileWidth * scale)), (int)(y * (tileHeight * scale)));
         }
-
     }
 
     public Point2D getRealPosition() {
         return new Point2D.Double((x) * (tileWidth * scale), y * (tileHeight * scale));
+    }
+
+    public  Point2D getRealCenter() {
+        return new Point2D.Double((x) * (tileWidth * scale) + tileWidth/2, y * (tileHeight * scale) + tileHeight/2);
     }
 
     public int getX() {

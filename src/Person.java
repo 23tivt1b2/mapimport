@@ -119,8 +119,8 @@ public class Person {
                         }
                     }
                     for (Tile tile : AllWalls.getInstance().getAllWalls()) {
-                        Point2D point2D = new Point2D.Double(tile.getRealPosition().getX() + tile.getTileWidth()/2, tile.getRealPosition().getY() + tile.getTileHeight()/2);
-                        if(point2D.distance(this.newPosition) < 10) {
+                        //Point2D point2D = new Point2D.Double(tile.getRealPosition().getX() + tile.getTileWidth()/2, tile.getRealPosition().getY() + tile.getTileHeight()/2);
+                        if(tile.getRealCenter().distance(this.newPosition) < 5) {
                             this.canMove = false;
                             //System.out.println("COLLISION");
                             break;

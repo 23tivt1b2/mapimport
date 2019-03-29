@@ -1,3 +1,5 @@
+import org.jfree.fx.FXGraphics2D;
+
 import java.time.LocalTime;
 
 public class Clock {
@@ -62,6 +64,10 @@ public class Clock {
             }
         }
         return false;
+    }
+
+    public void draw(FXGraphics2D graphics2D) {
+        graphics2D.drawString(getTime(), (MapDataLoader.getInstance().getWidth() * MapDataLoader.getInstance().getTileWidth() / 2), -10);
     }
 
     public LocalTime getLocalTime() {

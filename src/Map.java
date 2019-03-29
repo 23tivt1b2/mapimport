@@ -1,6 +1,8 @@
 import Json.Area;
 import Json.Layer;
 import Json.Tileset;
+import org.jfree.fx.FXGraphics2D;
+
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -125,8 +127,11 @@ public class Map {
         }
     }
 
-    public void draw(Graphics2D graphics){
+    public void draw(FXGraphics2D graphics){
         graphics.drawImage(cacheImage,new AffineTransform(),null);
+        for(Location location : locations) {
+            location.debugDraw(graphics);
+        }
     }
 
     public void drawCache(Graphics2D graphics) {

@@ -75,7 +75,7 @@ public class Agenda {
             //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
             int movementSpeed = rnd.nextInt(maxMovementSpeed - 1);
             Point2D pos = new Point2D.Double(artistEntranceAndExit.get(entranceTileNumber).getPosition().getX(), artistEntranceAndExit.get(entranceTileNumber).getPosition().getY());
-            Person artist = new Person(pos, 5, 5, movementSpeed + 1);
+            Person artist = new Person(pos, 5, 5, movementSpeed + 1, true);
 
             String stageName = this.getPerformanceStageHashMap().get(p).getStageName();
             Location locationStage = null;
@@ -104,7 +104,7 @@ public class Agenda {
                 ArrayList<Person> artists = new ArrayList<>();
 
                 for(Person person : location.getPersons()) {
-                    artists.add(new Person(person.getOldPosition(), person.getWidth(), person.getHeight() ,person.getMovementSpeed()));
+                    artists.add(new Person(person.getOldPosition(), person.getWidth(), person.getHeight() ,person.getMovementSpeed(), true));
                 }
 
                 location.removeVisitors();

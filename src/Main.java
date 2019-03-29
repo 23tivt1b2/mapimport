@@ -165,6 +165,8 @@ public class Main extends Application {
 
         this.locationHandler.draw(graphics);
 
+        Clock.getInstance().draw(graphics);
+
         graphics.setTransform(origianlTransform);
     }
 
@@ -197,7 +199,7 @@ public class Main extends Application {
                         //Random movementSpeed, max to -1, then when initializing add +1 to make sure movementSpeed is not 0;
                         int movementSpeed = rnd.nextInt(MAX_MOVEMENT_SPEED - 1);
                         Point2D pos = new Point2D.Double(this.entrances.get(entranceTileNumber).getPosition().getX(), this.entrances.get(entranceTileNumber).getPosition().getY());
-                        Person person = new Person(pos, 5, 5, movementSpeed + 1);
+                        Person person = new Person(pos, 5, 5, movementSpeed + 1, false);
 
                         AllPersons.getInstance().addPerson(person);
 

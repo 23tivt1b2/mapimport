@@ -1,5 +1,6 @@
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -58,18 +59,26 @@ public class Location {
 
     public void addVisitor(Person person) {
         this.persons.add(person);
+        setPersonEndPosInLocation(person);
+    }
+
+    private void setPersonEndPosInLocation(Person person) {
+        person.setPersonSlightlyOff((int)position.getX(), (int)position.getY(), (int)position.getX() + ((width + 1) * MapDataLoader.getInstance().getTileWidth()), (int)position.getY() + (height + 1) * MapDataLoader.getInstance().getTileHeight());
     }
 
     public void updateVisitors() {
-
         for(Person p : persons) {
             p.move(this);
         }
-
     }
 
     public void removeVisitors() {
         this.persons.clear();
+    }
+
+    public void debugDraw(FXGraphics2D g2d) {
+        g2d.setColor(Color.blue);
+        g2d.drawRect((int)position.getX(), (int)position.getY(), (width + 1) * MapDataLoader.getInstance().getTileWidth(), (height + 1) * MapDataLoader.getInstance().getTileHeight());
     }
 
     public void drawVisitors(FXGraphics2D g2d) {

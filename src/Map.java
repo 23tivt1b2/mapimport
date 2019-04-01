@@ -130,7 +130,7 @@ public class Map {
     public void draw(FXGraphics2D graphics){
         graphics.drawImage(cacheImage,new AffineTransform(),null);
         for(Location location : locations) {
-            location.debugDraw(graphics);
+            //location.debugDraw(graphics);
         }
     }
 

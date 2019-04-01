@@ -49,8 +49,8 @@ public class Tile {
 
 
         if(isWall) {
-            g2d.setColor(Color.red);
-            g2d.drawRect((int)((x) * (tileWidth * scale)), (int)(y * (tileHeight * scale)), 10, 10);
+            //g2d.setColor(Color.red);
+            //g2d.drawRect((int)((x) * (tileWidth * scale)), (int)(y * (tileHeight * scale)), 10, 10);
             //g2d.drawString(distanceTo + "", (int)(x * (tileWidth * scale)), (int)(y * (tileHeight * scale)));
         }
         else {

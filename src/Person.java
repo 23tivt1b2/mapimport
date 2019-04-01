@@ -55,7 +55,7 @@ public class Person {
 
             if(currentTile != null) {
 
-                if(currentTile.getDistanceTo() == 0) {
+                if(currentTile.getDistanceTo() < 2.5) {
                     hasArrived = true;
                     return;
                 }
@@ -226,6 +226,14 @@ public class Person {
                         }
                     }
                 }
+                //for (Tile tile : AllWalls.getInstance().getAllWalls()) {
+                //    if(tile.getRealPosition().getX() < this.getNewPosition().getX()  + 1 && tile.getRealPosition().getX() + tile.getTileWidth() > this.getNewPosition().getX()) {
+                //        if(tile.getRealPosition().getY() < this.getNewPosition().getY() + 1&& tile.getRealPosition().getY() + tile.getTileHeight() > this.getNewPosition().getY()) {
+                //            this.canMove = false;
+                //            break;
+                //        }
+                //    }
+                //}
                 if(this.canMove) {
                     this.oldPosition = this.newPosition;
                 }
@@ -243,7 +251,8 @@ public class Person {
     }
 
     public Direction randomDirection(Direction direction) {
-        int randomFactor = (int) (Math.random() * 4);
+        int randomFactor = 1+ ((int)(Math.random() * 4));
+        System.out.println(randomFactor);
         switch (randomFactor) {
             case 1:
                 if(direction.equals(Direction.UP)) {

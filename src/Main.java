@@ -68,7 +68,7 @@ public class Main extends Application {
     }
 
     public void init() {
-        MapDataLoader.getInstance().loadJson("map.json");
+        MapDataLoader.getInstance().loadJson("mapc.json");
         this.map = new Map();
 
         locations = this.map.getLocations();
